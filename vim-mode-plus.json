@@ -2,7 +2,7 @@
   "title": "Vim Mode Plus",
   "rules": [
     {
-      "description": "(Vim 1/11) caps_lock -> on, caps_lock, esc, control+[ or any pointing_button -> off",
+      "description": "(Vim 1/11) hold s -> on, caps_lock, esc, control+[ or any pointing_button -> off",
       "manipulators": [
         {
           "type": "basic",
@@ -12,12 +12,15 @@
           "to_after_key_up": [
             {
               "set_variable": {
-                "name": "simple_vi_mode", "value": 1
+                "name": "simple_vi_mode",
+                "value": 1
               }
             },
             {
-              "shell_command": "osascript -e 'display notification \"Press [i] to leave\" with title \"-- NORMAL --\"'",
-              "halt": true
+              "set_notification_message": {
+                "id": "simple_vi_mode",
+                "text": "INSERT MODE"
+              }
             }
           ],
           "to_if_held_down": [
@@ -28,7 +31,10 @@
               }
             },
             {
-              "shell_command": "osascript -e 'display notification \"Release [caps lock] to leave\" with title \"-- NORMAL --\"'"
+              "set_notification_message": {
+                "id": "simple_vi_mode",
+                "text": "NORMAL MODE"
+              }
             }
           ],
           "to_after_key_up": [
@@ -59,39 +65,6 @@
             "basic.to_if_alone_threshold_milliseconds": 0,
             "basic.to_if_held_down_threshold_milliseconds": 100
           }
-        },
-        {
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock"
-          },
-          "to": [
-            {
-              "set_variable": {
-                "name": "simple_vi_mode",
-                "value": 0
-              }
-            },
-            {
-              "shell_command": "osascript -e 'display notification with title \"-- INSERT --\"'"
-            }
-          ],
-          "conditions": [
-            {
-              "type": "frontmost_application_unless",
-              "bundle_identifiers": [
-                "com.googlecode.iterm2",
-                "com.github.atom",
-                "com.jetbrains.pycharm",
-                "com.visualstudio.code.oss"
-              ]
-            },
-            {
-              "name": "simple_vi_mode",
-              "type": "variable_if",
-              "value": 1
-            }
-          ]
         },
         {
           "type": "basic",
